@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import Layout from '../Layout';
 import { showError, showSuccess, showLoading } from '../../utils/messages';
 import { Link } from 'react-router-dom';
-import { createCategory } from '../../api/apiAdmin';
+import { createCoupon } from '../../api/apiAdmin';
 import { userInfo } from '../../utils/auth';
 
-const CreateCategory = () => {
+const CreateCoupon = () => {
     const [values, setValues] = useState({
         name: '',
+		discount:'',
         error: false,
         success: false,
         loading: false
     });
 
-    const { name, error, success, loading } = values;
+    const { name, discount,  error, success, loading } = values;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -23,10 +24,11 @@ const CreateCategory = () => {
         
 
         const { token } = userInfo();
-        createCategory(token, { name: name })
+        createCoupon(token, { name: name, discount:discount })
             .then(response => {
                 setValues({
                     name: '',
+					discount: '',
                     error: false,
                     success: true,
                     loading: false
@@ -56,7 +58,7 @@ const CreateCategory = () => {
         })
     }
 
-    const categoryForm = () => {
+    const couponForm = () => {
         return (
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -66,6 +68,18 @@ const CreateCategory = () => {
                         type="text"
                         onChange={handleChange}
                         value={name}
+                        autoFocus
+                        required
+                        className="form-control"
+                    />
+                </div>
+				<div className="form-group">
+                    <label className="text-muted">Discount Amount</label>
+                    <input
+                        name="discount"
+                        type="number"
+                        onChange={handleChange}
+                        value={discount}
                         autoFocus
                         required
                         className="form-control"
@@ -81,20 +95,20 @@ const CreateCategory = () => {
     </div>)
 
 
-    return (
-        <Layout title="Add a new category">
-            <div className="row">
-                <div className="col-md-8 offset-md-2">
-                    {showLoading(loading)}
-                    {showError(error, error)}
-                    {showSuccess(success, 'Category Created!')}
-                    {categoryForm()}
-                    {goBack()}
-                </div>
-            </div>
-        </Layout>
-    );
 
+  return (
+	<Layout title="Add a new coupon">
+	<div className="row">
+		<div className="col-md-8 offset-md-2">
+			{showLoading(loading)}
+			{showError(error, error)}
+			{showSuccess(success, 'Coupon Created!')}
+			{couponForm()}
+			{goBack()}
+		</div>
+	</div>
+</Layout>
+  )
 }
 
-export default CreateCategory;
+export default CreateCoupon

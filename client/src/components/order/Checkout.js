@@ -37,6 +37,8 @@ const Checkout = () => {
         loadCart();
     }, []);
 
+   
+
 
     const getOrderTotal = () => {
         const arr = orderItems.map(cartItem => cartItem.price * cartItem.count);

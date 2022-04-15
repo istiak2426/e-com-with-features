@@ -26,9 +26,11 @@ module.exports.getCartItem = async (req, res) => {
 }
 
 module.exports.updateCartItem = async (req, res) => {
-    const { _id, count } = _.pick(req.body, ["count", "_id"]);
+    const { _id, count } = _.pick(req.body, ["count",  "_id"]);
     userId = req.user._id;
-    await CartItem.updateOne({ _id: _id, user: userId }, { count: count });
+    
+
+    await CartItem.updateOne({ _id: _id, user: userId}, { count: count });
     return res.status(200).send("Item updated!!");
 }
 
