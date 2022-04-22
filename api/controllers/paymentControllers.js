@@ -36,11 +36,14 @@ module.exports.initPayment = async (req, res) => {
     const userId = req.user._id;
     const cartItems = await CartItem.find({ user: userId });
     const profile = await Profile.findOne({ user: userId });
+    
+
 
     const { address1, address2, city, state, postcode, country, phone } = profile;
 
     const total_amount = cartItems.map(item => item.count * item.price)
         .reduce((a, b) => a + b, 0);
+        
 
     const total_item = cartItems.map(item => item.count)
         .reduce((a, b) => a + b, 0);

@@ -1,8 +1,16 @@
 import React from 'react'
+import { useState } from 'react';
 
 const CouponList = (props) => {
 
+const [disabled, setDisabled] = useState(false);
 
+
+
+const handleButton = (e)=> {
+  console.log("clicked")
+  setDisabled(false);
+}
 
   return (
 	<div><div 
@@ -18,7 +26,12 @@ const CouponList = (props) => {
 
                 <button 
     
-                onClick={()=>props.SelectCoupon(props.coupon)}
+                onClick={() => { props.SelectCoupon(props.coupon); handleButton();}}
+
+     
+
+
+
                 >add</button></div>
   )
 }

@@ -14,10 +14,14 @@ import { getCouponItem } from "../../api/apiAdmin";
 
 import { userInfo } from "../../utils/auth";
 
+import { isAuthenticated } from "../../utils/auth";
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [couponItems, setCouponItems] = useState([]);
-  const [selectedCoupon, setSelectedCoupon] = useState({});
+  const [selectedCoupon, setSelectedCoupon] = useState([]);
+
+  const [totalSum, setTotalSum] = useState(0);
 
   const loadCart = () => {
     getCartItems(userInfo().token)
@@ -35,6 +39,22 @@ const Cart = () => {
     loadCoupon();
   }, []);
 
+
+
+    const onSelectCoupon = (coupon) => {
+      setSelectedCoupon(coupon);
+      setTotalSum((prevState) => {
+  
+        return  getCartTotal()
+      });
+  
+      if (isAuthenticated()) {
+        const user = userInfo();
+  
+  
+      }
+    };
+
   const increaseItem = (item) => () => {
     if (item.count === 5) return;
     const cartItem = {
@@ -46,29 +66,47 @@ const Cart = () => {
       .catch((err) => {});
   };
 
-
-
-
   const getCartTotal = () => {
     const arr = cartItems.map((item) => item.price * item.count);
-    const sum = arr.reduce((a, b) => a + b, 0);
+    let sum = arr.reduce((a, b) => a + b, 0);
 
-    let disc = null;
-    let discountSum = sum;
+    let discountSum = null;
 
-    if (!selectedCoupon.discount) {
-      discountSum = sum;
-    } else {
+    if (selectedCoupon.discount) {
       discountSum = sum - selectedCoupon.discount;
-    }
-
-    return discountSum;
+      
+    }    
+  return discountSum;
   };
 
-  const onSelectCoupon = (item) => {
-    setSelectedCoupon(item);
+ 
+  console.log(totalSum)
 
-  };
+  let onSelect = null;
+
+  if (selectedCoupon.length === 0) {
+    onSelect = (
+      <tr>
+        <th scope="row">No Promo</th>
+        <th></th>
+        <td> </td>
+        <td></td>
+        <td align="right"></td>
+      </tr>
+    );
+  } else if (selectedCoupon.length === undefined) {
+    onSelect = (
+      <>
+        <tr>
+          <th scope="row">Promo</th>
+          <th>{selectedCoupon.name}</th>
+          <td> </td>
+          <td></td>
+          <td align="right">৳ {selectedCoupon.discount}</td>
+        </tr>
+      </>
+    );
+  }
 
   const coupon = couponItems.map((c) => {
     return <CouponList coupon={c} key={c._id} SelectCoupon={onSelectCoupon} />;
@@ -139,6 +177,9 @@ const Cart = () => {
                 removeItem={removeItem(item)}
               />
             ))}
+
+            {onSelect}
+
             <tr>
               <th scope="row" />
               <td colSpan={3}>Total</td>

@@ -26,7 +26,7 @@ export const userInfo = () => {
     return { ...decoded, token: jwt }
 }
 
-export const singout = cb => {
+export const signOut = cb => {
     if (typeof window !== 'undefined') {
         localStorage.removeItem('jwt');
         cb();

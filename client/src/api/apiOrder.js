@@ -60,3 +60,7 @@ export const initPayment = token =>{
         }
     })
 }
+
+export const getOrders = token =>{
+    return axios.get(`${API}/order`)
+}

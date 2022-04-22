@@ -10,7 +10,7 @@ import {
 import { showSuccess, showError } from "../../utils/messages";
 import { addToCart } from "../../api/apiOrder";
 import { isAuthenticated, userInfo } from "../../utils/auth";
-import axios from "axios";
+
 
 const ProductDetails = (props) => {
   const [product, setProduct] = useState({});

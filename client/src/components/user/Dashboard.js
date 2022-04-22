@@ -2,7 +2,33 @@ import Layout from '../Layout';
 import { Link } from 'react-router-dom';
 import { userInfo } from '../../utils/auth';
 
+import {getOrders} from "../../api/apiOrder";
+import { useEffect, useState } from 'react';
+
+import Order from './Order';
+
+
+
+
 const Dashboard = () => {
+
+    const [orders, setOrders]= useState([])
+
+
+
+    useEffect(()=>{
+        getOrders()
+        .then(res => setOrders(res.data));
+    }, [])
+
+
+ 
+
+   const orderDetails =  orders.map((order)=>{
+        return(<Order order={order} key={order._id}/>)})
+
+
+    
     const { name, email, role } = userInfo();
     const UserLinks = () => {
         return (
@@ -21,11 +47,13 @@ const Dashboard = () => {
     };
 
     const PurchaseHistory = () => (
+
+        
         <div className="card mb-5">
             <h3 className="card-header">Purchase History</h3>
-            <ul className="list-group">
-                <li className="list-group-item">History</li>
-            </ul>
+            {orderDetails}
+            
+            
         </div>
     );
 
@@ -49,6 +77,7 @@ const Dashboard = () => {
                 <div className="col-sm-9">
                     <UserInfo />
                     <PurchaseHistory />
+                    {/* <div>{orders[0].address.city}</div> */}
                 </div>
             </div>
         </Layout>
